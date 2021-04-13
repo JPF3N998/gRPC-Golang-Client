@@ -5,14 +5,14 @@ import (
 	"log"
 	"time"
 
-	pb "local/pokemon"
+	proto "github.com/JPF3N998/gRPC-Golang-Server/proto"
 
 	"google.golang.org/grpc"
 )
 
-func printPokemonInfo(client pb.SearchPokedexClient, name string) {
+func printPokemonInfo(client proto.SearchPokedexClient, name string) {
 
-	request := pb.SearchRequest{
+	request := proto.SearchRequest{
 		Name: name,
 	}
 
@@ -34,7 +34,7 @@ func main() {
 		log.Fatalf("fail to dial: %v", err)
 	}
 	defer conn.Close()
-	client := pb.NewSearchPokedexClient(conn)
+	client := proto.NewSearchPokedexClient(conn)
 
 	printPokemonInfo(client, "bulbasaur")
 }
