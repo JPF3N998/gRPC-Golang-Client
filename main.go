@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"time"
 
@@ -10,7 +11,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func printPokemonInfo(client proto.SearchPokedexClient, name string) {
+func printPokemonInfo(client proto.PokedexClient, name string) {
 
 	request := proto.SearchRequest{
 		Name: name,
@@ -22,7 +23,8 @@ func printPokemonInfo(client proto.SearchPokedexClient, name string) {
 	if err != nil {
 		log.Fatalf("%v.GetPokemon(_) = _, %v: ", client, err)
 	}
-	log.Println(pkmn)
+	prettyprinted, _ := json.MarshalIndent(pkmn, "", " ")
+	log.Println(string(prettyprinted))
 }
 
 func main() {
@@ -34,7 +36,7 @@ func main() {
 		log.Fatalf("fail to dial: %v", err)
 	}
 	defer conn.Close()
-	client := proto.NewSearchPokedexClient(conn)
+	client := proto.NewPokedexClient(conn)
 
 	printPokemonInfo(client, "bulbasaur")
 }
